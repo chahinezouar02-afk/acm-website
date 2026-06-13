@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACM — Agronomy & Consulting · Merabet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Cinzel:wght@400;600;700&family=Cairo:wght@300;400;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────────────── */
+    :root {
+      --green-deep:   #1a3d2b;
+      --green-mid:    #2d6a4f;
+      --green-accent: #40916c;
+      --green-light:  #74c69d;
+      --green-pale:   #d8f3dc;
+      --white:        #ffffff;
+      --off-white:    #f8f9f5;
+      --black:        #0a0a0a;
+      --grey-dk:      #1c1c1c;
+      --grey-md:      #4a4a4a;
+      --grey-lt:      #9a9a9a;
+      --border:       rgba(42,106,79,0.15);
+      --ff-display:   'Cinzel', serif;
+      --ff-editorial: 'Playfair Display', serif;
+      --ff-body:      'Inter', sans-serif;
+      --ff-arabic:    'Cairo', 'Amiri', serif;
+      --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-back:    cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--ff-body);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; width: 100%; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    /* ─── LANGUAGE BODY STATES ───────────────────────────────────────── */
+    body[lang="ar"] { direction: rtl; font-family: var(--ff-arabic); }
+    body[lang="ar"] .nav-logo,
+    body[lang="ar"] h1, body[lang="ar"] h2, body[lang="ar"] h3 {
+      font-family: var(--ff-arabic);
+      letter-spacing: 0;
+    }
+    body[lang="ar"] .hero-tagline,
+    body[lang="ar"] .section-eyebrow {
+      letter-spacing: 0;
+      font-family: var(--ff-arabic);
+    }
+
+    /* ─── SCROLLBAR ──────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--off-white); }
+    ::-webkit-scrollbar-thumb { background: var(--green-accent); border-radius: 3px; }
+
+    /* ─── CURSOR DOT ─────────────────────────────────────────────────── */
+    .cursor-dot {
+      width: 8px; height: 8px;
+      background: var(--green-accent);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s, opacity 0.3s;
+      mix-blend-mode: multiply;
+    }
+    .cursor-ring {
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--green-accent);
+      border-radius: 50%;
+      position: fixed; top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.18s var(--ease-expo), width 0.3s, height 0.3s, opacity 0.3s;
+      opacity: 0.6;
+    }
+
+    /* ─── NAV ────────────────────────────────────────────────────────── */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 5vw;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 76px;
+      transition: background 0.5s var(--ease-expo), box-shadow 0.5s, backdrop-filter 0.5s;
+    }
+    #navbar.scrolled {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 1px 0 var(--border), 0 8px 32px rgba(0,0,0,0.06);
+    }
+    .nav-logo {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--white);
+      transition: color 0.4s;
+    }
+    #navbar.scrolled .nav-logo { color: var(--green-deep); }
+    .nav-logo span { color: var(--green-light); }
+
+    .nav-links {
+      display: flex; gap: 2.5rem; align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      transition: color 0.3s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 1px; background: var(--green-light);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.35s var(--ease-expo);
+    }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    #navbar.scrolled .nav-links a { color: var(--grey-md); }
+    .nav-links a:hover { color: var(--green-accent) !important; }
+
+    .lang-switcher {
+      display: flex; gap: 0.4rem; align-items: center;
+    }
+    .lang-btn {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: var(--ff-body);
+    }
+    .lang-btn:hover, .lang-btn.active {
+      background: var(--green-accent);
+      border-color: var(--green-accent);
+      color: var(--white);
+    }
+    #navbar.scrolled .lang-btn {
+      border-color: var(--border);
+      color: var(--grey-md);
+    }
+    #navbar.scrolled .lang-btn:hover,
+    #navbar.scrolled .lang-btn.active {
+      background: var(--green-accent);
+      color: var(--white);
+      border-color: var(--green-accent);
+    }
+
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 1.5px;
+      background: var(--white);
+      transition: all 0.35s var(--ease-expo);
+    }
+    #navbar.scrolled .hamburger span { background: var(--black); }
+
+    /* ─── HERO ───────────────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      height: 100vh; min-height: 700px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background: var(--green-deep);
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(160deg, rgba(10,30,20,0.82) 0%, rgba(26,61,43,0.55) 60%, rgba(64,145,108,0.25) 100%),
+        url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1800&q=85') center/cover no-repeat;
+      transform: scale(1.06);
+      animation: heroZoom 18s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom {
+      from { transform: scale(1.06); }
+      to   { transform: scale(1.14); }
+    }
+
+    /* grain overlay */
+    .hero-grain {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 0 2rem;
+    }
+    .hero-eyebrow {
+      font-family: var(--ff-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s 0.3s var(--ease-expo) forwards;
+    }
+    .hero-title {
+      font-family: var(--ff-display);
+      font-size: clamp(5rem, 14vw, 11rem);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--white);
+      line-height: 1;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1s 0.55s var(--ease-expo) forwards;
+    }
+    .hero-title .accent-dot {
+      color: var(--green-light);
+      display: inline-block;
+      animation: pulse 2.5s 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.6; transform: scale(0.9); }
+    }
+    .hero-divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green-light), transparent);
+      margin: 1.8rem auto;
+      opacity: 0;
+      animation: fadeIn 1s 0.9s forwards;
+    }
+    .hero-tagline {
+      font-family: var(--ff-editorial);
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.04em;
+      max-width: 520px;
+      margin: 0 auto 2.8rem;
+      line-height: 1.65;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1s 1s var(--ease-expo) forwards;
+    }
+    .hero-cta-row {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeIn 1s 1.3s forwards;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 14px 32px;
+      background: var(--green-accent);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      border: 1.5px solid var(--green-accent);
+      cursor: pointer;
+      transition: all 0.35s var(--ease-expo);
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: var(--green-deep);
+      transform: translateX(-105%);
+      transition: transform 0.4s var(--ease-expo);
+    }
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-primary:hover { border-color: var(--green-deep); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 14px 32px;
+      background: transparent;
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: all 0.35s;
+    }
+    .btn-ghost:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.06);
+    }
+
+    .hero-scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s 2s forwards;
+    }
+    .scroll-line {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+      animation: scrollAnim 2s ease-in-out infinite;
+    }
+    @keyframes scrollAnim {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* stats bar */
+    .hero-stats {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(10,20,15,0.75);
+      backdrop-filter: blur(12px);
+      display: flex; justify-content: center;
+      border-top: 1px solid rgba(116,198,157,0.1);
+      opacity: 0;
+      animation: fadeIn 1s 1.6s forwards;
+    }
+    .stat-item {
+      padding: 1.4rem 3.5vw;
+      text-align: center;
+      border-right: 1px solid rgba(116,198,157,0.1);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--green-light);
+      letter-spacing: 0.06em;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      margin-top: 0.2rem;
+    }
+
+    /* ─── SECTION COMMONS ────────────────────────────────────────────── */
+    section { padding: 120px 5vw; }
+    .section-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--green-accent);
+      margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1px;
+      background: var(--green-accent);
+    }
+    body[lang="ar"] .section-eyebrow::before { display: none; }
+    body[lang="ar"] .section-eyebrow::after {
+      content: '';
+      display: inline-block;
+      width: 28px; height: 1px;
+      background: var(--green-accent);
+    }
+    .section-title {
+      font-family: var(--ff-editorial);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.12;
+      color: var(--black);
+      margin-bottom: 1.4rem;
+    }
+    .section-subtitle {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--grey-md);
+      max-width: 560px;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* reveal on scroll */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s var(--ease-expo), transform 0.9s var(--ease-expo);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.22s; }
+    .reveal-delay-3 { transition-delay: 0.34s; }
+    .reveal-delay-4 { transition-delay: 0.46s; }
+
+    /* ─── ABOUT / HISTORY ────────────────────────────────────────────── */
+    #about {
+      background: var(--off-white);
+      padding: 120px 5vw;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 4rem;
+    }
+    .about-image-wrap {
+      position: relative;
+    }
+    .about-image-wrap img {
+      border-radius: 2px;
+      height: 560px;
+      object-fit: cover;
+      filter: grayscale(20%) contrast(1.05);
+      transition: filter 0.6s;
+    }
+    .about-image-wrap:hover img { filter: grayscale(0%) contrast(1); }
+    .about-image-badge {
+      position: absolute; bottom: -24px; right: -24px;
+      width: 140px; height: 140px;
+      background: var(--green-accent);
+      border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: var(--white);
+      box-shadow: 0 12px 48px rgba(45,106,79,0.35);
+    }
+    .about-badge-year {
+      font-family: var(--ff-display);
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .about-badge-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    /* timeline */
+    .timeline {
+      margin-top: 3rem;
+      position: relative;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px; top: 8px; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--green-accent), transparent);
+    }
+    body[lang="ar"] .timeline::before { left: auto; right: 12px; }
+
+    .timeline-item {
+      display: flex; gap: 1.8rem;
+      margin-bottom: 2.4rem;
+      position: relative;
+    }
+    .tl-dot {
+      width: 24px; height: 24px; min-width: 24px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2px solid var(--green-accent);
+      margin-top: 2px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.3s;
+    }
+    .tl-dot::after {
+      content: ''; width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green-accent);
+    }
+    .timeline-item:hover .tl-dot { background: var(--green-accent); }
+    .tl-content { flex: 1; }
+    .tl-year {
+      font-family: var(--ff-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: var(--green-accent);
+      margin-bottom: 0.3rem;
+    }
+    .tl-title {
+      font-family: var(--ff-editorial);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--black);
+      margin-bottom: 0.3rem;
+    }
+    .tl-text {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--grey-md);
+    }
+
+    /* ─── PRODUCTS ───────────────────────────────────────────────────── */
+    #products { background: var(--white); }
+    .products-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3.5rem;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5px;
+      background: var(--border);
+    }
+    .product-card {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      background: var(--off-white);
+      cursor: pointer;
+    }
+    .product-card img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s var(--ease-expo), filter 0.5s;
+      filter: brightness(0.9);
+    }
+    .product-card:hover img {
+      transform: scale(1.07);
+      filter: brightness(0.75);
+    }
+    .product-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,30,20,0.9) 0%, transparent 55%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 2rem;
+      transition: background 0.4s;
+    }
+    .product-card:hover .product-overlay {
+      background: linear-gradient(to top, rgba(10,30,20,0.97) 0%, rgba(10,30,20,0.3) 100%);
+    }
+    .product-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      background: rgba(64,145,108,0.2);
+      border: 1px solid rgba(64,145,108,0.3);
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 0.7rem;
+      width: fit-content;
+    }
+    .product-name {
+      font-family: var(--ff-editorial);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+    }
+    .product-desc {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+      transform: translateY(12px);
+      opacity: 0;
+      transition: all 0.45s var(--ease-expo);
+    }
+    .product-card:hover .product-desc {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .product-arrow {
+      margin-top: 1rem;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white);
+      transform: translateY(12px);
+      opacity: 0;
+      transition: all 0.45s 0.05s var(--ease-expo);
+    }
+    .product-card:hover .product-arrow {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* featured product (large) */
+    .product-card.featured {
+      grid-column: span 2;
+      aspect-ratio: unset;
+      min-height: 420px;
+    }
+
+    /* ─── PARTNERS ───────────────────────────────────────────────────── */
+    #partners {
+      background: var(--green-deep);
+      padding: 100px 5vw;
+      overflow: hidden;
+    }
+    #partners .section-eyebrow { color: var(--green-light); }
+    #partners .section-title { color: var(--white); }
+    #partners .section-subtitle { color: rgba(255,255,255,0.5); }
+
+    .partners-track-wrap {
+      margin-top: 3.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+    .partners-track-wrap::before,
+    .partners-track-wrap::after {
+      content: '';
+      position: absolute; top: 0; bottom: 0; width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .partners-track-wrap::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--green-deep), transparent);
+    }
+    .partners-track-wrap::after {
+      right: 0;
+      background: linear-gradient(-90deg, var(--green-deep), transparent);
+    }
+    .partners-track {
+      display: flex; gap: 2px;
+      animation: marquee 28s linear infinite;
+      width: max-content;
+    }
+    .partners-track:hover { animation-play-state: paused; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .partner-chip {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.4rem 2.4rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 2px;
+      white-space: nowrap;
+      transition: all 0.3s;
+    }
+    .partner-chip:hover {
+      background: rgba(64,145,108,0.1);
+      border-color: rgba(64,145,108,0.25);
+    }
+    .partner-icon {
+      width: 36px; height: 36px;
+      background: var(--green-accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .partner-name {
+      font-family: var(--ff-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* ─── NEWS ───────────────────────────────────────────────────────── */
+    #news { background: var(--off-white); }
+    .news-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      margin-top: 3.5rem;
+    }
+    .news-card {
+      background: var(--white);
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.4s;
+    }
+    .news-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); z-index: 1; position: relative; }
+    .news-img {
+      overflow: hidden;
+      height: 220px;
+    }
+    .news-card.featured .news-img { height: 320px; }
+    .news-img img {
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-expo);
+    }
+    .news-card:hover .news-img img { transform: scale(1.05); }
+    .news-body {
+      padding: 1.8rem;
+      flex: 1;
+      display: flex; flex-direction: column;
+    }
+    .news-meta {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 0.9rem;
+    }
+    .news-cat {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-accent);
+    }
+    .news-date {
+      font-size: 0.7rem;
+      color: var(--grey-lt);
+    }
+    .news-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--grey-lt); }
+    .news-title {
+      font-family: var(--ff-editorial);
+      font-size: 1.1rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--black);
+      margin-bottom: 0.7rem;
+      flex: 1;
+    }
+    .news-card.featured .news-title { font-size: 1.5rem; }
+    .news-excerpt {
+      font-size: 0.82rem;
+      color: var(--grey-md);
+      line-height: 1.65;
+      margin-bottom: 1.2rem;
+    }
+    .news-read-more {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green-accent);
+      transition: gap 0.3s;
+    }
+    .news-card:hover .news-read-more { gap: 0.8rem; }
+
+    /* ─── CONTACT ────────────────────────────────────────────────────── */
+    #contact {
+      background: var(--white);
+      padding: 120px 5vw;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      margin-top: 4rem;
+      align-items: start;
+    }
+    .contact-info { }
+    .contact-item {
+      display: flex; gap: 1.4rem; align-items: flex-start;
+      margin-bottom: 2.4rem;
+      padding-bottom: 2.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .contact-icon-wrap {
+      width: 48px; height: 48px; min-width: 48px;
+      background: var(--green-pale);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+      transition: background 0.3s;
+    }
+    .contact-item:hover .contact-icon-wrap { background: var(--green-accent); }
+    .contact-item-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--grey-lt);
+      margin-bottom: 0.3rem;
+    }
+    .contact-item-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--black);
+      line-height: 1.5;
+    }
+
+    /* action buttons row */
+    .contact-actions {
+      display: flex; flex-direction: column; gap: 1rem;
+      margin-top: 2rem;
+    }
+    .contact-btn {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 16px 22px;
+      border-radius: 2px;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      font-family: var(--ff-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      transition: all 0.35s var(--ease-expo);
+      background: var(--white);
+      text-align: left;
+      color: var(--black);
+      width: 100%;
+    }
+    .contact-btn .btn-icon {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      transition: transform 0.3s var(--ease-back);
+    }
+    .contact-btn:hover .btn-icon { transform: scale(1.12) rotate(-5deg); }
+    .btn-maps-google .btn-icon { background: #e8f5e9; }
+    .btn-maps-apple .btn-icon  { background: #f5f5f5; }
+    .btn-whatsapp .btn-icon    { background: #e8f5e9; }
+    .contact-btn:hover {
+      border-color: var(--green-accent);
+      background: var(--off-white);
+      transform: translateX(4px);
+    }
+    body[lang="ar"] .contact-btn:hover { transform: translateX(-4px); }
+    .btn-sub {
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--grey-lt);
+      margin-top: 2px;
+    }
+
+    /* form */
+    .contact-form-wrap {
+      background: var(--off-white);
+      padding: 3rem;
+      border-radius: 2px;
+    }
+    .form-title {
+      font-family: var(--ff-editorial);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .form-subtitle {
+      font-size: 0.85rem;
+      color: var(--grey-md);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .form-group.full { margin-bottom: 1rem; }
+    .form-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey-md);
+    }
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 2px;
+      font-family: var(--ff-body);
+      font-size: 0.9rem;
+      color: var(--black);
+      transition: border-color 0.3s, box-shadow 0.3s;
+      outline: none;
+    }
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--green-accent);
+      box-shadow: 0 0 0 3px rgba(64,145,108,0.1);
+    }
+    .form-textarea { min-height: 130px; resize: vertical; }
+    .form-submit {
+      width: 100%;
+      padding: 15px;
+      background: var(--green-deep);
+      color: var(--white);
+      font-family: var(--ff-body);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 0.5rem;
+    }
+    .form-submit:hover {
+      background: var(--green-accent);
+      transform: translateY(-1px);
+    }
+    .form-submit:active { transform: translateY(0); }
+
+    /* ─── FOOTER ─────────────────────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      padding: 70px 5vw 30px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 50px;
+      padding-bottom: 50px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .footer-brand .nav-logo {
+      color: var(--white) !important;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .footer-desc {
+      font-size: 0.84rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.38);
+      max-width: 260px;
+    }
+    .footer-col-title {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 1.4rem;
+    }
+    .footer-links { display: flex; flex-direction: column; gap: 0.8rem; }
+    .footer-links a {
+      font-size: 0.84rem;
+      color: rgba(255,255,255,0.55);
+      transition: color 0.25s;
+    }
+    .footer-links a:hover { color: var(--green-light); }
+    .footer-bottom {
+      padding-top: 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.05em;
+    }
+    .footer-socials {
+      display: flex; gap: 0.6rem;
+    }
+    .social-btn {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.4);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .social-btn:hover {
+      border-color: var(--green-accent);
+      color: var(--green-light);
+      background: rgba(64,145,108,0.1);
+    }
+
+    /* ─── FLOATING WHATSAPP ──────────────────────────────────────────── */
+    .whatsapp-fab {
+      position: fixed; bottom: 2.5rem; right: 2.5rem;
+      z-index: 800;
+      width: 58px; height: 58px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+      cursor: pointer;
+      transition: transform 0.35s var(--ease-back), box-shadow 0.35s;
+      animation: fabPop 0.7s 2.5s var(--ease-back) both;
+    }
+    @keyframes fabPop {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    .whatsapp-fab:hover {
+      transform: scale(1.12);
+      box-shadow: 0 10px 36px rgba(37,211,102,0.55);
+    }
+    .whatsapp-fab .fab-pulse {
+      position: absolute; inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(37,211,102,0.4);
+      animation: fabRing 2s ease-out infinite;
+    }
+    @keyframes fabRing {
+      0%   { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.5); opacity: 0; }
+    }
+    body[lang="ar"] .whatsapp-fab { right: auto; left: 2.5rem; }
+
+    /* ─── MOBILE NAV OVERLAY ─────────────────────────────────────────── */
+    .mobile-nav {
+      position: fixed; inset: 0; z-index: 999;
+      background: var(--green-deep);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 2rem;
+      transform: translateX(100%);
+      transition: transform 0.5s var(--ease-expo);
+    }
+    .mobile-nav.open { transform: translateX(0); }
+    .mobile-nav a {
+      font-family: var(--ff-editorial);
+      font-size: 2rem;
+      color: var(--white);
+      font-weight: 700;
+      transition: color 0.3s;
+    }
+    .mobile-nav a:hover { color: var(--green-light); }
+    .mobile-close {
+      position: absolute; top: 1.6rem; right: 2rem;
+      font-size: 2rem;
+      color: var(--white);
+      cursor: pointer;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+
+    /* ─── RESPONSIVE ─────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .products-grid { grid-template-columns: 1fr 1fr; }
+      .product-card.featured { grid-column: span 2; }
+      .news-grid { grid-template-columns: 1fr 1fr; }
+      .news-card.featured { grid-column: span 2; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      section { padding: 80px 5vw; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-image-wrap img { height: 360px; }
+      .about-image-badge { width: 100px; height: 100px; bottom: -16px; right: -16px; }
+      .products-grid { grid-template-columns: 1fr; }
+      .product-card.featured { grid-column: span 1; }
+      .news-grid { grid-template-columns: 1fr; }
+      .news-card.featured { grid-column: span 1; }
+      .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+      .contact-form-wrap { padding: 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; gap: 30px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero-stats { display: none; }
+      .cursor-dot, .cursor-ring { display: none; }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 4.5rem; }
+      .hero-cta-row { flex-direction: column; align-items: center; }
+    }
+
+    /* ─── PROGRESS BAR ───────────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed; top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--green-accent), var(--green-light));
+      z-index: 1001;
+      width: 0%;
+      transition: width 0.1s;
+    }
+
+    /* ─── SECTION DIVIDER ────────────────────────────────────────────── */
+    .divider-leaf {
+      text-align: center;
+      color: var(--green-light);
+      font-size: 1.6rem;
+      opacity: 0.4;
+      letter-spacing: 0.6em;
+      padding: 1rem 0;
+    }
+
+    /* toast */
+    .toast {
+      position: fixed; bottom: 6rem; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--green-deep);
+      color: var(--white);
+      padding: 12px 24px;
+      border-radius: 2px;
+      font-size: 0.85rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s var(--ease-expo);
+      z-index: 2000;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body lang="en">
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- WhatsApp FAB -->
+<a class="whatsapp-fab" href="https://wa.me/213XXXXXXXXX" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <div class="fab-pulse"></div>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.116 1.524 5.847L.057 23.868l6.202-1.485A11.944 11.944 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.896 0-3.676-.5-5.217-1.374l-.374-.222-3.882.93.996-3.77-.244-.387A9.952 9.952 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+  </svg>
+</a>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" id="mobileClose">&times;</button>
+  <a href="#about"    onclick="closeMobileNav()" data-i18n="nav-story">Our Story</a>
+  <a href="#products" onclick="closeMobileNav()" data-i18n="nav-products">Products</a>
+  <a href="#partners" onclick="closeMobileNav()" data-i18n="nav-partners">Partners</a>
+  <a href="#news"     onclick="closeMobileNav()" data-i18n="nav-news">Insights</a>
+  <a href="#contact"  onclick="closeMobileNav()" data-i18n="nav-contact">Contact</a>
+</div>
+
+<!-- ─── NAVBAR ───────────────────────────────────────────────────────── -->
+<nav id="navbar">
+  <div class="nav-logo"><span>ACM</span></div>
+  <ul class="nav-links">
+    <li><a href="#about"    data-i18n="nav-story">Our Story</a></li>
+    <li><a href="#products" data-i18n="nav-products">Products</a></li>
+    <li><a href="#partners" data-i18n="nav-partners">Partners</a></li>
+    <li><a href="#news"     data-i18n="nav-news">Insights</a></li>
+    <li><a href="#contact"  data-i18n="nav-contact">Contact</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('ar')">AR</button>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="openMobileNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─────────────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow" data-i18n="hero-eyebrow">Agronomy &amp; Consulting · Merabet</p>
+    <h1 class="hero-title">ACM<span class="accent-dot">.</span></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline" data-i18n="hero-tagline">Where the wisdom of the earth meets the precision of modern expertise.</p>
+    <div class="hero-cta-row">
+      <a href="#products" class="btn-primary"><span data-i18n="hero-cta1">Explore Our Goods</span></a>
+      <a href="#contact" class="btn-ghost" data-i18n="hero-cta2">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num" data-count="25">0</div><div class="stat-label" data-i18n="stat1">Years of Heritage</div></div>
+    <div class="stat-item"><div class="stat-num" data-count="40">0</div><div class="stat-label" data-i18n="stat2">Partner Nations</div></div>
+    <div class="stat-item"><div class="stat-num" data-count="120">0</div><div class="stat-label" data-i18n="stat3">Agricultural Products</div></div>
+    <div class="stat-item"><div class="stat-num" data-count="500">0</div><div class="stat-label" data-i18n="stat4">Clients Served</div></div>
+  </div>
+  <div class="hero-scroll-hint">
+    <span data-i18n="scroll">Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ─── ABOUT / HISTORY ───────────────────────────────────────────────── -->
+<section id="about">
+  <div class="section-eyebrow reveal" data-i18n="about-eyebrow">Our Heritage</div>
+  <div class="about-grid">
+    <div class="about-image-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=800&q=85" alt="Merabet agricultural heritage" />
+      <div class="about-image-badge">
+        <div class="about-badge-year">1999</div>
+        <div class="about-badge-text" data-i18n="badge-founded">Founded</div>
+      </div>
+    </div>
+    <div>
+      <h2 class="section-title reveal" data-i18n="about-title">A Legacy Rooted<br><em>in the Land</em></h2>
+      <p class="section-subtitle reveal reveal-delay-1" data-i18n="about-desc">The Merabet family has cultivated a profound relationship with Algerian soil for over two decades. What began as a local agricultural endeavor has evolved into a structured consulting enterprise with international reach — without ever losing the values of the earth.</p>
+      <div class="timeline reveal reveal-delay-2">
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-year" data-i18n="tl1-year">1999</div>
+            <div class="tl-title" data-i18n="tl1-title">The Foundation</div>
+            <div class="tl-text" data-i18n="tl1-text">The Merabet family establishes its first agricultural operation in Algeria, focusing on sustainable local cultivation practices.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-year" data-i18n="tl2-year">2008</div>
+            <div class="tl-title" data-i18n="tl2-title">Regional Expansion</div>
+            <div class="tl-text" data-i18n="tl2-text">Operations expand to three provinces, integrating modern irrigation and crop-yield consulting for partner farms across the region.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-year" data-i18n="tl3-year">2015</div>
+            <div class="tl-title" data-i18n="tl3-title">International Reach</div>
+            <div class="tl-text" data-i18n="tl3-text">ACM establishes partnerships with European and African importers, bringing Algerian agricultural quality to global markets.</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <div class="tl-year" data-i18n="tl4-year">Today</div>
+            <div class="tl-title" data-i18n="tl4-title">ACM — The Consulting Era</div>
+            <div class="tl-text" data-i18n="tl4-text">A fully integrated agronomy and consulting firm, offering end-to-end agricultural advisory services alongside premium goods trading.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PRODUCTS ──────────────────────────────────────────────────────── -->
+<section id="products">
+  <div class="products-header">
+    <div>
+      <div class="section-eyebrow reveal" data-i18n="products-eyebrow">The Catalogue</div>
+      <h2 class="section-title reveal" data-i18n="products-title">Premium Agricultural<br><em>Goods & Services</em></h2>
+    </div>
+    <p class="section-subtitle reveal" style="max-width:380px;" data-i18n="products-desc">From field to consultation — every product and service bearing the ACM mark represents uncompromising quality and agronomic expertise.</p>
+  </div>
+
+  <div class="products-grid">
+    <!-- Featured -->
+    <div class="product-card featured reveal">
+      <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=1000&q=85" alt="Premium Dates" />
+      <div class="product-overlay">
+        <span class="product-tag" data-i18n="pt-seasonal">Seasonal · Premium</span>
+        <div class="product-name" data-i18n="p1-name">Deglet Nour Dates</div>
+        <div class="product-desc" data-i18n="p1-desc">The crown jewel of Algerian agriculture. Sun-ripened, hand-selected, and exported to premium markets globally. Available October – March.</div>
+        <div class="product-arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+    <!-- Products 2–6 -->
+    <div class="product-card reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=600&q=85" alt="Olive Oil" />
+      <div class="product-overlay">
+        <span class="product-tag" data-i18n="pt-certified">Certified Organic</span>
+        <div class="product-name" data-i18n="p2-name">Extra-Virgin Olive Oil</div>
+        <div class="product-desc" data-i18n="p2-desc">Cold-pressed from heritage groves, yielding oil of exceptional purity and flavour with less than 0.3% acidity.</div>
+        <div class="product-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?w=600&q=85" alt="Consulting" />
+      <div class="product-overlay">
+        <span class="product-tag" data-i18n="pt-service">Advisory Service</span>
+        <div class="product-name" data-i18n="p3-name">Crop Yield Consulting</div>
+        <div class="product-desc" data-i18n="p3-desc">Data-driven agronomic consulting from soil health analysis to harvest optimisation for farms of any scale.</div>
+        <div class="product-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+    <div class="product-card reveal">
+      <img src="https://images.unsplash.com/photo-1620145648-81a2ff65ba97?w=600&q=85" alt="Spices" />
+      <div class="product-overlay">
+        <span class="product-tag" data-i18n="pt-export">Export Grade</span>
+        <div class="product-name" data-i18n="p4-name">Aromatic Spice Range</div>
+        <div class="product-desc" data-i18n="p4-desc">Cumin, coriander, ras el hanout — sourced directly from Algerian highlands and processed to international food-safety standards.</div>
+        <div class="product-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=85" alt="Grains" />
+      <div class="product-overlay">
+        <span class="product-tag" data-i18n="pt-bulk">Bulk Supply</span>
+        <div class="product-name" data-i18n="p5-name">Heritage Grain Varieties</div>
+        <div class="product-desc" data-i18n="p5-desc">Durum wheat and ancient grain varieties, cultivated using traditional rotational farming for superior nutritional profiles.</div>
+        <div class="product-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+    <div class="product-card reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=85" alt="Land Planning" />
+      <div class="product-overlay">
+        <span class="product-tag" data-i18n="pt-service">Advisory Service</span>
+        <div class="product-name" data-i18n="p6-name">Agricultural Land Planning</div>
+        <div class="product-desc" data-i18n="p6-desc">End-to-end land assessment, irrigation design, and cultivation roadmaps for investors entering the agri-sector.</div>
+        <div class="product-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PARTNERS ──────────────────────────────────────────────────────── -->
+<section id="partners">
+  <div class="section-eyebrow reveal" data-i18n="partners-eyebrow">The Network</div>
+  <h2 class="section-title reveal" data-i18n="partners-title">Strategic<br><em>Partnerships</em></h2>
+  <p class="section-subtitle reveal reveal-delay-1" data-i18n="partners-desc">Trusted by leading organisations across Europe, Africa, and the Middle East — our partners certify ACM's standing in the global agricultural arena.</p>
+
+  <div class="partners-track-wrap reveal reveal-delay-2">
+    <div class="partners-track" id="partnersTrack">
+      <!-- duplicated for infinite loop -->
+    </div>
+  </div>
+</section>
+
+<!-- ─── NEWS ──────────────────────────────────────────────────────────── -->
+<section id="news">
+  <div class="section-eyebrow reveal" data-i18n="news-eyebrow">The Press Room</div>
+  <h2 class="section-title reveal" data-i18n="news-title">Latest Insights<br><em>&amp; News</em></h2>
+
+  <div class="news-grid">
+    <!-- Featured article -->
+    <div class="news-card featured reveal">
+      <div class="news-img">
+        <img src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=900&q=85" alt="Agri tech" />
+      </div>
+      <div class="news-body">
+        <div class="news-meta">
+          <span class="news-cat" data-i18n="nc-agri">Agri-Technology</span>
+          <div class="news-dot"></div>
+          <span class="news-date" data-i18n="n1-date">June 2025</span>
+        </div>
+        <h3 class="news-title" data-i18n="n1-title">How AI-Powered Soil Analysis is Transforming Crop Yields Across North Africa</h3>
+        <p class="news-excerpt" data-i18n="n1-excerpt">ACM's consulting team integrates machine-learning soil diagnostics with traditional agronomic knowledge to deliver measurable yield improvements — reducing water usage by up to 30% on partner farms.</p>
+        <a href="#" class="news-read-more">
+          <span data-i18n="read-more">Read Article</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+    <!-- Article 2 -->
+    <div class="news-card reveal reveal-delay-1">
+      <div class="news-img">
+        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600&q=85" alt="Dates export" />
+      </div>
+      <div class="news-body">
+        <div class="news-meta">
+          <span class="news-cat" data-i18n="nc-export">Export</span>
+          <div class="news-dot"></div>
+          <span class="news-date" data-i18n="n2-date">May 2025</span>
+        </div>
+        <h3 class="news-title" data-i18n="n2-title">Algerian Deglet Nour Sees Record European Demand in 2025 Season</h3>
+        <p class="news-excerpt" data-i18n="n2-excerpt">Premium Algerian date varieties are capturing premium shelf space in French and German retail chains — and ACM is at the centre of this export surge.</p>
+        <a href="#" class="news-read-more"><span data-i18n="read-more">Read Article</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+    <!-- Article 3 -->
+    <div class="news-card reveal reveal-delay-2">
+      <div class="news-img">
+        <img src="https://images.unsplash.com/photo-1461354464878-ad92f492a5a0?w=600&q=85" alt="Sustainability" />
+      </div>
+      <div class="news-body">
+        <div class="news-meta">
+          <span class="news-cat" data-i18n="nc-sustain">Sustainability</span>
+          <div class="news-dot"></div>
+          <span class="news-date" data-i18n="n3-date">April 2025</span>
+        </div>
+        <h3 class="news-title" data-i18n="n3-title">ACM Launches Water-Efficient Farming Initiative Across Three Algerian Provinces</h3>
+        <p class="news-excerpt" data-i18n="n3-excerpt">A new drip-irrigation consulting programme launched in partnership with regional agricultural authorities, targeting 5,000 hectares by 2026.</p>
+        <a href="#" class="news-read-more"><span data-i18n="read-more">Read Article</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ────────────────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="section-eyebrow reveal" data-i18n="contact-eyebrow">Get In Touch</div>
+  <h2 class="section-title reveal" data-i18n="contact-title">Let's Start a<br><em>Conversation</em></h2>
+
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <div class="contact-item">
+        <div class="contact-icon-wrap">📍</div>
+        <div>
+          <div class="contact-item-label" data-i18n="c-location">Location</div>
+          <div class="contact-item-value" data-i18n="c-location-val">Algiers, Algeria<br>Exact coordinates available via maps below</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon-wrap">📞</div>
+        <div>
+          <div class="contact-item-label" data-i18n="c-phone">Phone</div>
+          <div class="contact-item-value">+213 XX XX XX XX XX</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon-wrap">✉️</div>
+        <div>
+          <div class="contact-item-label" data-i18n="c-email">Email</div>
+          <div class="contact-item-value">contact@acm-agro.dz</div>
+        </div>
+      </div>
+
+      <div class="contact-actions">
+        <button class="contact-btn btn-maps-google" onclick="openMaps('google')">
+          <div class="btn-icon">🗺️</div>
+          <div>
+            <div data-i18n="btn-gmaps">Open in Google Maps</div>
+            <div class="btn-sub" data-i18n="btn-gmaps-sub">Android · Web</div>
+          </div>
+        </button>
+        <button class="contact-btn btn-maps-apple" onclick="openMaps('apple')">
+          <div class="btn-icon">🍎</div>
+          <div>
+            <div data-i18n="btn-amaps">Open in Apple Maps</div>
+            <div class="btn-sub" data-i18n="btn-amaps-sub">iPhone · Mac</div>
+          </div>
+        </button>
+        <a class="contact-btn btn-whatsapp" href="https://wa.me/213XXXXXXXXX" target="_blank" rel="noopener">
+          <div class="btn-icon">💬</div>
+          <div>
+            <div data-i18n="btn-wa">Chat on WhatsApp</div>
+            <div class="btn-sub" data-i18n="btn-wa-sub">Quick response within 1 hour</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="contact-form-wrap reveal reveal-delay-2">
+      <div class="form-title" data-i18n="form-title">Send a Message</div>
+      <div class="form-subtitle" data-i18n="form-sub">Whether you're a buyer, investor, or a farm owner seeking consultation — we're here to help.</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" data-i18n="form-fname">First Name</label>
+          <input class="form-input" type="text" placeholder="Youcef" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form-lname">Last Name</label>
+          <input class="form-input" type="text" placeholder="Merabet" />
+        </div>
+      </div>
+      <div class="form-group full">
+        <label class="form-label" data-i18n="form-email">Email Address</label>
+        <input class="form-input" type="email" placeholder="you@example.com" />
+      </div>
+      <div class="form-group full">
+        <label class="form-label" data-i18n="form-subject">Subject</label>
+        <input class="form-input" type="text" placeholder="Product enquiry / Consulting request" />
+      </div>
+      <div class="form-group full">
+        <label class="form-label" data-i18n="form-message">Message</label>
+        <textarea class="form-textarea" placeholder="Tell us about your project or enquiry…"></textarea>
+      </div>
+      <button class="form-submit" onclick="submitForm()" data-i18n="form-send">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="nav-logo" style="font-size:1.4rem;margin-bottom:1rem;display:block;"><span>ACM</span></span>
+      <p class="footer-desc" data-i18n="footer-desc">Agronomy and Consulting · Merabet. Bridging Algeria's agricultural heritage with the demands of a modern global market.</p>
+    </div>
+    <div>
+      <div class="footer-col-title" data-i18n="footer-company">Company</div>
+      <ul class="footer-links">
+        <li><a href="#about"    data-i18n="nav-story">Our Story</a></li>
+        <li><a href="#products" data-i18n="nav-products">Products</a></li>
+        <li><a href="#partners" data-i18n="nav-partners">Partners</a></li>
+        <li><a href="#news"     data-i18n="nav-news">Insights</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title" data-i18n="footer-services">Services</div>
+      <ul class="footer-links">
+        <li><a href="#" data-i18n="fs1">Crop Consulting</a></li>
+        <li><a href="#" data-i18n="fs2">Export Advisory</a></li>
+        <li><a href="#" data-i18n="fs3">Land Assessment</a></li>
+        <li><a href="#" data-i18n="fs4">Market Access</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title" data-i18n="footer-contact">Contact</div>
+      <ul class="footer-links">
+        <li><a href="mailto:contact@acm-agro.dz">contact@acm-agro.dz</a></li>
+        <li><a href="tel:+213XXXXXXXXX">+213 XX XX XX XX</a></li>
+        <li><a href="#contact" data-i18n="footer-send">Send a Message</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy" data-i18n="footer-copy">© 2025 ACM — Agronomy &amp; Consulting · Merabet. All rights reserved.</div>
+    <div class="footer-socials">
+      <div class="social-btn" title="LinkedIn">in</div>
+      <div class="social-btn" title="Instagram">ig</div>
+      <div class="social-btn" title="Facebook">fb</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ─── i18n ────────────────────────────────────────────────────────────── */
+const translations = {
+  en: {
+    "nav-story":"Our Story","nav-products":"Products","nav-partners":"Partners",
+    "nav-news":"Insights","nav-contact":"Contact",
+    "hero-eyebrow":"Agronomy & Consulting · Merabet",
+    "hero-tagline":"Where the wisdom of the earth meets the precision of modern expertise.",
+    "hero-cta1":"Explore Our Goods","hero-cta2":"Get In Touch",
+    "stat1":"Years of Heritage","stat2":"Partner Nations","stat3":"Agricultural Products","stat4":"Clients Served",
+    "scroll":"Scroll",
+    "about-eyebrow":"Our Heritage",
+    "about-title":"A Legacy Rooted in the Land",
+    "about-desc":"The Merabet family has cultivated a profound relationship with Algerian soil for over two decades. What began as a local agricultural endeavor has evolved into a structured consulting enterprise with international reach.",
+    "badge-founded":"Founded",
+    "tl1-year":"1999","tl1-title":"The Foundation","tl1-text":"The Merabet family establishes its first agricultural operation in Algeria, focusing on sustainable local cultivation practices.",
+    "tl2-year":"2008","tl2-title":"Regional Expansion","tl2-text":"Operations expand to three provinces, integrating modern irrigation and crop-yield consulting for partner farms.",
+    "tl3-year":"2015","tl3-title":"International Reach","tl3-text":"ACM establishes partnerships with European and African importers, bringing Algerian quality to global markets.",
+    "tl4-year":"Today","tl4-title":"The Consulting Era","tl4-text":"A fully integrated agronomy and consulting firm offering end-to-end agricultural advisory services.",
+    "products-eyebrow":"The Catalogue","products-title":"Premium Agricultural Goods & Services",
+    "products-desc":"From field to consultation — every product bearing the ACM mark represents uncompromising quality.",
+    "pt-seasonal":"Seasonal · Premium","pt-certified":"Certified Organic","pt-service":"Advisory Service","pt-export":"Export Grade","pt-bulk":"Bulk Supply",
+    "p1-name":"Deglet Nour Dates","p1-desc":"The crown jewel of Algerian agriculture. Sun-ripened, hand-selected, and exported globally. Available October – March.",
+    "p2-name":"Extra-Virgin Olive Oil","p2-desc":"Cold-pressed from heritage groves, yielding oil of exceptional purity with less than 0.3% acidity.",
+    "p3-name":"Crop Yield Consulting","p3-desc":"Data-driven agronomic consulting from soil health analysis to harvest optimisation.",
+    "p4-name":"Aromatic Spice Range","p4-desc":"Cumin, coriander, ras el hanout — sourced from Algerian highlands and processed to international standards.",
+    "p5-name":"Heritage Grain Varieties","p5-desc":"Durum wheat and ancient grains cultivated using traditional rotational farming for superior nutritional profiles.",
+    "p6-name":"Agricultural Land Planning","p6-desc":"End-to-end land assessment, irrigation design, and cultivation roadmaps for agri-investors.",
+    "partners-eyebrow":"The Network","partners-title":"Strategic Partnerships",
+    "partners-desc":"Trusted by leading organisations across Europe, Africa, and the Middle East.",
+    "news-eyebrow":"The Press Room","news-title":"Latest Insights & News",
+    "nc-agri":"Agri-Technology","nc-export":"Export","nc-sustain":"Sustainability",
+    "n1-date":"June 2025","n1-title":"How AI-Powered Soil Analysis is Transforming Crop Yields Across North Africa",
+    "n1-excerpt":"ACM's consulting team integrates machine-learning soil diagnostics with traditional agronomic knowledge to deliver measurable yield improvements.",
+    "n2-date":"May 2025","n2-title":"Algerian Deglet Nour Sees Record European Demand in 2025 Season",
+    "n2-excerpt":"Premium Algerian dates are capturing premium shelf space in French and German retail chains — and ACM is at the centre of this export surge.",
+    "n3-date":"April 2025","n3-title":"ACM Launches Water-Efficient Farming Initiative Across Three Algerian Provinces",
+    "n3-excerpt":"A new drip-irrigation consulting programme launched in partnership with regional agricultural authorities, targeting 5,000 hectares by 2026.",
+    "read-more":"Read Article",
+    "contact-eyebrow":"Get In Touch","contact-title":"Let's Start a Conversation",
+    "c-location":"Location","c-location-val":"Algiers, Algeria\nExact coordinates via maps below",
+    "c-phone":"Phone","c-email":"Email",
+    "btn-gmaps":"Open in Google Maps","btn-gmaps-sub":"Android · Web",
+    "btn-amaps":"Open in Apple Maps","btn-amaps-sub":"iPhone · Mac",
+    "btn-wa":"Chat on WhatsApp","btn-wa-sub":"Quick response within 1 hour",
+    "form-title":"Send a Message","form-sub":"Whether you're a buyer, investor, or farm owner seeking consultation — we're here.",
+    "form-fname":"First Name","form-lname":"Last Name","form-email":"Email Address","form-subject":"Subject","form-message":"Message","form-send":"Send Message",
+    "footer-desc":"Bridging Algeria's agricultural heritage with the demands of a modern global market.",
+    "footer-company":"Company","footer-services":"Services","footer-contact":"Contact","footer-send":"Send a Message","footer-copy":"© 2025 ACM — Agronomy & Consulting · Merabet. All rights reserved.",
+    "fs1":"Crop Consulting","fs2":"Export Advisory","fs3":"Land Assessment","fs4":"Market Access",
+  },
+  fr: {
+    "nav-story":"Notre Histoire","nav-products":"Produits","nav-partners":"Partenaires",
+    "nav-news":"Actualités","nav-contact":"Contact",
+    "hero-eyebrow":"Agronomie & Conseil · Merabet",
+    "hero-tagline":"Là où la sagesse de la terre rencontre la précision de l'expertise moderne.",
+    "hero-cta1":"Nos Produits","hero-cta2":"Nous Contacter",
+    "stat1":"Ans d'Héritage","stat2":"Nations Partenaires","stat3":"Produits Agricoles","stat4":"Clients Servis",
+    "scroll":"Défiler",
+    "about-eyebrow":"Notre Héritage",
+    "about-title":"Un Héritage Ancré dans la Terre",
+    "about-desc":"La famille Merabet entretient depuis plus de deux décennies une relation profonde avec le sol algérien. Ce qui a commencé comme une activité agricole locale est devenu une entreprise de conseil structurée à portée internationale.",
+    "badge-founded":"Fondée",
+    "tl1-year":"1999","tl1-title":"La Fondation","tl1-text":"La famille Merabet établit sa première exploitation agricole en Algérie, axée sur des pratiques culturales durables.",
+    "tl2-year":"2008","tl2-title":"Expansion Régionale","tl2-text":"Les opérations s'étendent à trois wilayas, intégrant l'irrigation moderne et le conseil en rendement agricole.",
+    "tl3-year":"2015","tl3-title":"Rayonnement International","tl3-text":"ACM établit des partenariats avec des importateurs européens et africains, apportant la qualité algérienne sur les marchés mondiaux.",
+    "tl4-year":"Aujourd'hui","tl4-title":"L'Ère du Conseil","tl4-text":"Une entreprise d'agronomie et de conseil pleinement intégrée offrant des services d'accompagnement agricole de bout en bout.",
+    "products-eyebrow":"Le Catalogue","products-title":"Produits & Services Agricoles Premium",
+    "products-desc":"Du champ à la consultation — chaque produit portant le label ACM représente une qualité irréprochable.",
+    "pt-seasonal":"Saisonnier · Premium","pt-certified":"Bio Certifié","pt-service":"Service Conseil","pt-export":"Qualité Export","pt-bulk":"Fourniture en Vrac",
+    "p1-name":"Dattes Deglet Nour","p1-desc":"Le joyau de l'agriculture algérienne. Mûries au soleil, sélectionnées à la main et exportées mondialement.",
+    "p2-name":"Huile d'Olive Vierge Extra","p2-desc":"Pressée à froid de vergers centenaires, produisant une huile d'une pureté exceptionnelle.",
+    "p3-name":"Conseil en Rendement Agricole","p3-desc":"Conseil agronomique basé sur les données, de l'analyse de la santé des sols à l'optimisation des récoltes.",
+    "p4-name":"Gamme d'Épices Aromatiques","p4-desc":"Cumin, coriandre, ras el hanout — issus des hauts plateaux algériens selon les normes alimentaires internationales.",
+    "p5-name":"Variétés de Céréales Patrimoniales","p5-desc":"Blé dur et céréales anciennes cultivés selon les méthodes traditionnelles de rotation des cultures.",
+    "p6-name":"Planification Foncière Agricole","p6-desc":"Évaluation foncière complète, conception d'irrigation et feuilles de route pour les investisseurs agri-secteur.",
+    "partners-eyebrow":"Le Réseau","partners-title":"Partenariats Stratégiques",
+    "partners-desc":"Approuvé par des organisations de premier plan en Europe, Afrique et au Moyen-Orient.",
+    "news-eyebrow":"La Salle de Presse","news-title":"Dernières Actualités & Analyses",
+    "nc-agri":"Agri-Technologie","nc-export":"Export","nc-sustain":"Développement Durable",
+    "n1-date":"Juin 2025","n1-title":"Comment l'Analyse du Sol par IA Transforme les Rendements en Afrique du Nord",
+    "n1-excerpt":"L'équipe de conseil ACM intègre le diagnostic de sol par apprentissage automatique à la connaissance agronomique traditionnelle.",
+    "n2-date":"Mai 2025","n2-title":"La Deglet Nour Algérienne Enregistre une Demande Européenne Record en 2025",
+    "n2-excerpt":"Les dattes algériennes premium s'imposent dans les rayons des grandes surfaces françaises et allemandes — et ACM est au cœur de cet essor.",
+    "n3-date":"Avril 2025","n3-title":"ACM Lance une Initiative d'Agriculture Économe en Eau dans Trois Wilayas",
+    "n3-excerpt":"Un nouveau programme de conseil en irrigation goutte-à-goutte lancé en partenariat avec les autorités agricoles régionales.",
+    "read-more":"Lire l'Article",
+    "contact-eyebrow":"Nous Contacter","contact-title":"Commençons une Conversation",
+    "c-location":"Localisation","c-location-val":"Alger, Algérie\nCoordonnées exactes via les cartes ci-dessous",
+    "c-phone":"Téléphone","c-email":"Email",
+    "btn-gmaps":"Ouvrir dans Google Maps","btn-gmaps-sub":"Android · Web",
+    "btn-amaps":"Ouvrir dans Apple Maps","btn-amaps-sub":"iPhone · Mac",
+    "btn-wa":"Chat WhatsApp","btn-wa-sub":"Réponse rapide en moins d'une heure",
+    "form-title":"Envoyer un Message","form-sub":"Acheteur, investisseur ou propriétaire foncier — nous sommes là pour vous aider.",
+    "form-fname":"Prénom","form-lname":"Nom","form-email":"Adresse Email","form-subject":"Sujet","form-message":"Message","form-send":"Envoyer le Message",
+    "footer-desc":"Faire le pont entre le patrimoine agricole algérien et les exigences d'un marché mondial moderne.",
+    "footer-company":"Entreprise","footer-services":"Services","footer-contact":"Contact","footer-send":"Envoyer un Message","footer-copy":"© 2025 ACM — Agronomie & Conseil · Merabet. Tous droits réservés.",
+    "fs1":"Conseil Agricole","fs2":"Conseil Export","fs3":"Évaluation Foncière","fs4":"Accès aux Marchés",
+  },
+  ar: {
+    "nav-story":"قصتنا","nav-products":"المنتجات","nav-partners":"الشركاء",
+    "nav-news":"المستجدات","nav-contact":"تواصل معنا",
+    "hero-eyebrow":"الزراعة والاستشارات · مرابط",
+    "hero-tagline":"حيث تلتقي حكمة الأرض بدقة الخبرة العصرية.",
+    "hero-cta1":"استكشف منتجاتنا","hero-cta2":"تواصل معنا",
+    "stat1":"سنوات من التراث","stat2":"دولة شريكة","stat3":"منتجات زراعية","stat4":"عميل",
+    "scroll":"مرر",
+    "about-eyebrow":"إرثنا",
+    "about-title":"إرث متجذّر في الأرض",
+    "about-desc":"رسّخت عائلة مرابط علاقة عميقة مع التربة الجزائرية على مدى عقدين. ما بدأ كمشروع زراعي محلي تطوّر إلى مؤسسة استشارية متكاملة ذات امتداد دولي.",
+    "badge-founded":"التأسيس",
+    "tl1-year":"1999","tl1-title":"التأسيس","tl1-text":"أسّست عائلة مرابط أول استثمار زراعي لها في الجزائر، مع التركيز على ممارسات الزراعة المستدامة.",
+    "tl2-year":"2008","tl2-title":"التوسع الإقليمي","tl2-text":"امتدت العمليات إلى ثلاث ولايات مع دمج تقنيات الري الحديثة والاستشارات الزراعية للمزارع الشريكة.",
+    "tl3-year":"2015","tl3-title":"الانفتاح الدولي","tl3-text":"أرست ACM شراكات مع مستوردين أوروبيين وأفارقة، حاملةً جودة الإنتاج الجزائري إلى الأسواق العالمية.",
+    "tl4-year":"اليوم","tl4-title":"حقبة الاستشارات","tl4-text":"مؤسسة استشارية زراعية متكاملة تقدم خدمات إرشادية شاملة من الحقل إلى السوق.",
+    "products-eyebrow":"الكتالوج","products-title":"منتجات وخدمات زراعية فاخرة",
+    "products-desc":"من الحقل إلى الاستشارة — كل منتج يحمل ختم ACM يمثّل جودة لا تُساوم.",
+    "pt-seasonal":"موسمي · فاخر","pt-certified":"عضوي معتمد","pt-service":"خدمة استشارية","pt-export":"درجة التصدير","pt-bulk":"توريد بالجملة",
+    "p1-name":"تمر دقلة نور","p1-desc":"جوهرة الزراعة الجزائرية. ينضج تحت الشمس، يُنتقى يدويًا، ويُصدَّر إلى الأسواق العالمية من أكتوبر حتى مارس.",
+    "p2-name":"زيت زيتون بكر ممتاز","p2-desc":"معصور على البارد من بساتين عريقة، ينتج زيتًا استثنائي النقاء بنسبة حموضة أقل من 0.3%.",
+    "p3-name":"استشارة المحاصيل الزراعية","p3-desc":"استشارات زراعية قائمة على البيانات، من تحليل صحة التربة إلى تحسين إنتاجية الحصاد.",
+    "p4-name":"مجموعة التوابل العطرية","p4-desc":"كمون، كزبرة، رأس الحانوت — مصدرها المرتفعات الجزائرية ومعالجة وفق المعايير الدولية.",
+    "p5-name":"أصناف الحبوب الموروثة","p5-desc":"قمح صلب وحبوب قديمة تُزرع بأساليب الزراعة التناوبية التقليدية للحصول على أفضل القيم الغذائية.",
+    "p6-name":"التخطيط الزراعي للأراضي","p6-desc":"تقييم شامل للأراضي وتصميم شبكات الري ووضع خرائط طريق للمستثمرين في القطاع الزراعي.",
+    "partners-eyebrow":"الشبكة","partners-title":"شراكات استراتيجية",
+    "partners-desc":"تثق بنا مؤسسات رائدة في أوروبا وأفريقيا والشرق الأوسط.",
+    "news-eyebrow":"غرفة الأخبار","news-title":"آخر المستجدات والرؤى",
+    "nc-agri":"التكنولوجيا الزراعية","nc-export":"التصدير","nc-sustain":"الاستدامة",
+    "n1-date":"يونيو 2025","n1-title":"كيف يُحوّل تحليل التربة بالذكاء الاصطناعي محصول شمال أفريقيا",
+    "n1-excerpt":"تدمج فريق استشارات ACM التشخيص الرقمي للتربة بالمعرفة الزراعية التقليدية لتحقيق تحسينات ملموسة في الإنتاجية.",
+    "n2-date":"مايو 2025","n2-title":"تمر دقلة نور الجزائري يُسجّل طلبًا أوروبيًا قياسيًا في موسم 2025",
+    "n2-excerpt":"التمر الجزائري الفاخر يُتصدّر أرفف متاجر التجزئة الفرنسية والألمانية — وACM في قلب هذه الطفرة التصديرية.",
+    "n3-date":"أبريل 2025","n3-title":"ACM تُطلق مبادرة الزراعة الموفِّرة للمياه في ثلاث ولايات جزائرية",
+    "n3-excerpt":"برنامج استشاري جديد للري بالتنقيط بالشراكة مع السلطات الزراعية الإقليمية، يستهدف 5,000 هكتار بحلول 2026.",
+    "read-more":"قراءة المقال",
+    "contact-eyebrow":"تواصل معنا","contact-title":"لنبدأ حوارًا",
+    "c-location":"الموقع","c-location-val":"الجزائر العاصمة، الجزائر\nالإحداثيات الدقيقة عبر الخرائط أدناه",
+    "c-phone":"الهاتف","c-email":"البريد الإلكتروني",
+    "btn-gmaps":"فتح في Google Maps","btn-gmaps-sub":"Android · الويب",
+    "btn-amaps":"فتح في Apple Maps","btn-amaps-sub":"iPhone · Mac",
+    "btn-wa":"محادثة عبر واتساب","btn-wa-sub":"رد سريع في غضون ساعة",
+    "form-title":"أرسل رسالة","form-sub":"سواء كنت مشتريًا أو مستثمرًا أو مزارعًا — نحن هنا لمساعدتك.",
+    "form-fname":"الاسم الأول","form-lname":"اسم العائلة","form-email":"البريد الإلكتروني","form-subject":"الموضوع","form-message":"الرسالة","form-send":"إرسال الرسالة",
+    "footer-desc":"نجسر بين الإرث الزراعي الجزائري ومتطلبات الأسواق العالمية الحديثة.",
+    "footer-company":"الشركة","footer-services":"الخدمات","footer-contact":"تواصل","footer-send":"أرسل رسالة","footer-copy":"© 2025 ACM — الزراعة والاستشارات · مرابط. جميع الحقوق محفوظة.",
+    "fs1":"الاستشارة الزراعية","fs2":"استشارات التصدير","fs3":"تقييم الأراضي","fs4":"الوصول إلى الأسواق",
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const body = document.body;
+  body.setAttribute('lang', lang);
+  body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[lang] && translations[lang][key]) {
+      el.textContent = translations[lang][key];
+    }
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    if (btn.textContent.toLowerCase() === lang) btn.classList.add('active');
+  });
+}
+
+/* ─── PARTNER DATA ─────────────────────────────────────────────────── */
+const partners = [
+  { name: "AgroMed Export", icon: "🌿" },
+  { name: "Sahara Organics", icon: "☀️" },
+  { name: "Euro Agrі Group", icon: "🇪🇺" },
+  { name: "Maghreb Trade Co.", icon: "🤝" },
+  { name: "Atlas Fresh", icon: "🏔️" },
+  { name: "BioNord Africa", icon: "🌱" },
+  { name: "Meridian Foods", icon: "🌍" },
+  { name: "Sahel Harvest", icon: "🌾" },
+];
+
+function buildPartners() {
+  const track = document.getElementById('partnersTrack');
+  const all = [...partners, ...partners]; // duplicate for seamless loop
+  track.innerHTML = all.map(p => `
+    <div class="partner-chip">
+      <div class="partner-icon">${p.icon}</div>
+      <div class="partner-name">${p.name}</div>
+    </div>
+  `).join('');
+}
+buildPartners();
+
+/* ─── SCROLL-DRIVEN EFFECTS ────────────────────────────────────────── */
+const navbar = document.getElementById('navbar');
+const progressBar = document.getElementById('progressBar');
+
+window.addEventListener('scroll', () => {
+  // Navbar
+  if (window.scrollY > 60) navbar.classList.add('scrolled');
+  else navbar.classList.remove('scrolled');
+
+  // Progress bar
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  progressBar.style.width = (window.scrollY / total * 100) + '%';
+});
+
+/* ─── REVEAL ON SCROLL ─────────────────────────────────────────────── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ─── COUNTER ANIMATION ────────────────────────────────────────────── */
+function animateCounter(el, target) {
+  let start = 0;
+  const step = target / 60;
+  const suffix = target >= 100 ? '+' : '+';
+  const id = setInterval(() => {
+    start += step;
+    if (start >= target) { start = target; clearInterval(id); }
+    el.textContent = Math.floor(start) + suffix;
+  }, 22);
+}
+
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const target = parseInt(e.target.getAttribute('data-count'));
+      animateCounter(e.target, target);
+      countObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('[data-count]').forEach(el => countObserver.observe(el));
+
+/* ─── CURSOR ───────────────────────────────────────────────────────── */
+const dot  = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  dot.style.transform  = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
+});
+
+function animRing() {
+  ringX += (mouseX - ringX) * 0.12;
+  ringY += (mouseY - ringY) * 0.12;
+  ring.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px)`;
+  requestAnimationFrame(animRing);
+}
+animRing();
+
+document.querySelectorAll('a, button, .product-card, .news-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    ring.style.width  = '56px';
+    ring.style.height = '56px';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.width  = '36px';
+    ring.style.height = '36px';
+  });
+});
+
+/* ─── MOBILE NAV ───────────────────────────────────────────────────── */
+function openMobileNav()  { document.getElementById('mobileNav').classList.add('open'); }
+function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+document.getElementById('mobileClose').onclick = closeMobileNav;
+
+/* ─── MAPS ─────────────────────────────────────────────────────────── */
+function openMaps(provider) {
+  // Placeholder coordinates — replace with actual ACM location
+  const lat = 36.7372, lng = 3.0867;
+  const label = "ACM%20%E2%80%93%20Agronomy%20%26%20Consulting";
+
+  if (provider === 'google') {
+    window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+  } else {
+    // Apple Maps (works on iOS/macOS, falls back to web)
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      window.open(`maps://maps.apple.com/?ll=${lat},${lng}&q=${label}`, '_blank');
+    } else {
+      window.open(`https://maps.apple.com/?ll=${lat},${lng}&q=${label}`, '_blank');
+    }
+  }
+}
+
+/* ─── FORM TOAST ───────────────────────────────────────────────────── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+function submitForm() {
+  const msgs = { en: "✅ Message sent! We'll be in touch shortly.", fr: "✅ Message envoyé ! Nous vous répondrons très bientôt.", ar: "✅ تم إرسال رسالتك! سنتواصل معك قريبًا." };
+  showToast(msgs[currentLang] || msgs.en);
+}
+
+/* ─── HERO PARALLAX ────────────────────────────────────────────────── */
+const heroBg = document.querySelector('.hero-bg');
+window.addEventListener('scroll', () => {
+  const sy = window.scrollY;
+  if (sy < window.innerHeight) {
+    heroBg.style.transform = `scale(1.06) translateY(${sy * 0.25}px)`;
+  }
+}, { passive: true });
+</script>
+</body>
+</html>
