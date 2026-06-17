@@ -109,6 +109,24 @@
     #navbar.scrolled .nav-logo { color: var(--green-deep); }
     .nav-logo span { color: var(--green-light); }
 
+    .logo-img {
+      height: 50px;
+      width: auto;
+      display: block;
+      background: var(--white);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .footer-logo-img {
+      height: 70px;
+      width: auto;
+      display: block;
+      margin-bottom: 1.2rem;
+      background: var(--white);
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
     .nav-links {
       display: flex; gap: 2.5rem; align-items: center;
     }
@@ -1173,7 +1191,7 @@
 
 <!-- ─── NAVBAR ───────────────────────────────────────────────────────── -->
 <nav id="navbar">
-  <div class="nav-logo"><span>ACM</span></div>
+  <img src="assets/acm-logo.jpeg" alt="ACM — Agronomy and Consulting Merabet" class="logo-img" />
   <ul class="nav-links">
     <li><a href="#about"    data-i18n="nav-story">Our Story</a></li>
     <li><a href="#products" data-i18n="nav-products">Products</a></li>
@@ -1284,11 +1302,11 @@
   <div class="products-grid">
     <!-- Featured -->
     <div class="product-card featured reveal">
-      <img src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=1000&q=85" alt="Premium Dates" />
+      <img src="https://images.unsplash.com/photo-1610348725531-844bd25257f4?w=1000&q=85" alt="Zriaati - Premium Seeds" />
       <div class="product-overlay">
-        <span class="product-tag" data-i18n="pt-seasonal">Seasonal · Premium</span>
-        <div class="product-name" data-i18n="p1-name">Deglet Nour Dates</div>
-        <div class="product-desc" data-i18n="p1-desc">The crown jewel of Algerian agriculture. Sun-ripened, hand-selected, and exported to premium markets globally. Available October – March.</div>
+        <span class="product-tag" data-i18n="pt-seasonal">Famous · Flagship</span>
+        <div class="product-name">زريعتي <span style="font-size:0.9rem;font-weight:500;opacity:0.7;" data-i18n="p1-name-sub">— Zriaati</span></div>
+        <div class="product-desc" data-i18n="p1-desc">ACM's most famous product — premium seeds and grains selected for planting, chosen for high germination rates and yield. Trusted by farmers across our network for generations.</div>
         <div class="product-arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </div>
@@ -1504,7 +1522,7 @@
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <span class="nav-logo" style="font-size:1.4rem;margin-bottom:1rem;display:block;"><span>ACM</span></span>
+      <img src="assets/acm-logo.jpeg" alt="ACM Logo" class="footer-logo-img" />
       <p class="footer-desc" data-i18n="footer-desc">Agronomy and Consulting · Merabet. Bridging Algeria's agricultural heritage with the demands of a modern global market.</p>
     </div>
     <div>
@@ -1565,8 +1583,8 @@ const translations = {
     "tl4-year":"Today","tl4-title":"The Consulting Era","tl4-text":"A fully integrated agronomy and consulting firm offering end-to-end agricultural advisory services.",
     "products-eyebrow":"The Catalogue","products-title":"Premium Agricultural Goods & Services",
     "products-desc":"From field to consultation — every product bearing the ACM mark represents uncompromising quality.",
-    "pt-seasonal":"Seasonal · Premium","pt-certified":"Certified Organic","pt-service":"Advisory Service","pt-export":"Export Grade","pt-bulk":"Bulk Supply",
-    "p1-name":"Deglet Nour Dates","p1-desc":"The crown jewel of Algerian agriculture. Sun-ripened, hand-selected, and exported globally. Available October – March.",
+    "pt-seasonal":"Flagship Product","pt-certified":"Certified Organic","pt-service":"Advisory Service","pt-export":"Export Grade","pt-bulk":"Bulk Supply",
+    "p1-name-sub":"— Zriaati","p1-desc":"ACM's most famous product — premium seeds and grains selected for planting, chosen for high germination rates and yield. Trusted by farmers across our network for generations.",
     "p2-name":"Extra-Virgin Olive Oil","p2-desc":"Cold-pressed from heritage groves, yielding oil of exceptional purity with less than 0.3% acidity.",
     "p3-name":"Crop Yield Consulting","p3-desc":"Data-driven agronomic consulting from soil health analysis to harvest optimisation.",
     "p4-name":"Aromatic Spice Range","p4-desc":"Cumin, coriander, ras el hanout — sourced from Algerian highlands and processed to international standards.",
@@ -1613,8 +1631,8 @@ const translations = {
     "tl4-year":"Aujourd'hui","tl4-title":"L'Ère du Conseil","tl4-text":"Une entreprise d'agronomie et de conseil pleinement intégrée offrant des services d'accompagnement agricole de bout en bout.",
     "products-eyebrow":"Le Catalogue","products-title":"Produits & Services Agricoles Premium",
     "products-desc":"Du champ à la consultation — chaque produit portant le label ACM représente une qualité irréprochable.",
-    "pt-seasonal":"Saisonnier · Premium","pt-certified":"Bio Certifié","pt-service":"Service Conseil","pt-export":"Qualité Export","pt-bulk":"Fourniture en Vrac",
-    "p1-name":"Dattes Deglet Nour","p1-desc":"Le joyau de l'agriculture algérienne. Mûries au soleil, sélectionnées à la main et exportées mondialement.",
+    "pt-seasonal":"Produit Phare","pt-certified":"Bio Certifié","pt-service":"Service Conseil","pt-export":"Qualité Export","pt-bulk":"Fourniture en Vrac",
+    "p1-name-sub":"— Zriaati","p1-desc":"Le produit le plus célèbre d'ACM — semences et graines premium sélectionnées pour la plantation, choisies pour leur excellent taux de germination. Approuvées par les agriculteurs depuis des générations.",
     "p2-name":"Huile d'Olive Vierge Extra","p2-desc":"Pressée à froid de vergers centenaires, produisant une huile d'une pureté exceptionnelle.",
     "p3-name":"Conseil en Rendement Agricole","p3-desc":"Conseil agronomique basé sur les données, de l'analyse de la santé des sols à l'optimisation des récoltes.",
     "p4-name":"Gamme d'Épices Aromatiques","p4-desc":"Cumin, coriandre, ras el hanout — issus des hauts plateaux algériens selon les normes alimentaires internationales.",
@@ -1661,8 +1679,9 @@ const translations = {
     "tl4-year":"اليوم","tl4-title":"حقبة الاستشارات","tl4-text":"مؤسسة استشارية زراعية متكاملة تقدم خدمات إرشادية شاملة من الحقل إلى السوق.",
     "products-eyebrow":"الكتالوج","products-title":"منتجات وخدمات زراعية فاخرة",
     "products-desc":"من الحقل إلى الاستشارة — كل منتج يحمل ختم ACM يمثّل جودة لا تُساوم.",
-    "pt-seasonal":"موسمي · فاخر","pt-certified":"عضوي معتمد","pt-service":"خدمة استشارية","pt-export":"درجة التصدير","pt-bulk":"توريد بالجملة",
-    "p1-name":"تمر دقلة نور","p1-desc":"جوهرة الزراعة الجزائرية. ينضج تحت الشمس، يُنتقى يدويًا، ويُصدَّر إلى الأسواق العالمية من أكتوبر حتى مارس.",
+    "pt-seasonal":"المنتج الأشهر","pt-certified":"عضوي معتمد","pt-service":"خدمة استشارية","pt-export":"درجة التصدير","pt-bulk":"توريد بالجملة",
+    "p1-name-sub":"",
+    "p1-desc":"أشهر منتجات ACM — بذور وحبوب فاخرة مُختارة للزراعة، تتميز بمعدل إنبات مرتفع وعائد موثوق. ثقة الفلاحين منذ أجيال.",
     "p2-name":"زيت زيتون بكر ممتاز","p2-desc":"معصور على البارد من بساتين عريقة، ينتج زيتًا استثنائي النقاء بنسبة حموضة أقل من 0.3%.",
     "p3-name":"استشارة المحاصيل الزراعية","p3-desc":"استشارات زراعية قائمة على البيانات، من تحليل صحة التربة إلى تحسين إنتاجية الحصاد.",
     "p4-name":"مجموعة التوابل العطرية","p4-desc":"كمون، كزبرة، رأس الحانوت — مصدرها المرتفعات الجزائرية ومعالجة وفق المعايير الدولية.",
