@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algerian Deglet Nour Sees Record European Demand — ACM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --green-deep:   #1a3d2b;
+      --green-mid:    #2d6a4f;
+      --green-accent: #40916c;
+      --green-light:  #74c69d;
+      --green-pale:   #d8f3dc;
+      --terracotta:   #c8693f;
+      --terracotta-dk:#a8512e;
+      --white:        #ffffff;
+      --off-white:    #f8f9f5;
+      --black:        #0a0a0a;
+      --grey-dk:      #1c1c1c;
+      --grey-md:      #4a4a4a;
+      --grey-lt:      #9a9a9a;
+      --border:       rgba(42,106,79,0.15);
+      --ff-display:   'Cinzel', serif;
+      --ff-editorial: 'Playfair Display', serif;
+      --ff-body:      'Inter', sans-serif;
+      --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--ff-body); background: var(--white); color: var(--black); -webkit-font-smoothing: antialiased; }
+    img { display: block; width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* NAV (simplified, matches main site) */
+    #navbar {
+      position: sticky; top: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw; height: 76px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .logo-img { height: 50px; width: auto; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--green-accent);
+      transition: gap 0.3s;
+    }
+    .back-link:hover { gap: 0.9rem; }
+
+    /* ARTICLE HERO */
+    .article-hero {
+      padding: 4rem 5vw 0;
+      max-width: 880px; margin: 0 auto;
+    }
+    .article-meta {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 1.4rem;
+    }
+    .article-cat {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--green-accent);
+    }
+    .article-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--grey-lt); }
+    .article-date { font-size: 0.78rem; color: var(--grey-lt); }
+    .article-title {
+      font-family: var(--ff-editorial);
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 700; line-height: 1.15;
+      margin-bottom: 1.6rem;
+    }
+    .article-lede {
+      font-size: 1.15rem; line-height: 1.7; color: var(--grey-md);
+      font-style: italic;
+      border-left: 3px solid var(--green-accent);
+      padding-left: 1.2rem;
+      margin-bottom: 2.5rem;
+    }
+    .article-hero-img {
+      width: 100%; height: 460px; object-fit: cover;
+      border-radius: 2px;
+      margin-bottom: 0;
+    }
+
+    /* ARTICLE BODY */
+    .article-body {
+      max-width: 720px; margin: 3rem auto 5rem;
+      padding: 0 5vw;
+      font-size: 1.02rem; line-height: 1.85;
+      color: var(--grey-dk);
+    }
+    .article-body h2 {
+      font-family: var(--ff-editorial);
+      font-size: 1.6rem; font-weight: 700;
+      margin: 2.6rem 0 1rem;
+      color: var(--black);
+    }
+    .article-body p { margin-bottom: 1.4rem; }
+    .article-body blockquote {
+      border-left: 3px solid var(--terracotta);
+      padding: 0.4rem 1.4rem;
+      margin: 2rem 0;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: var(--grey-md);
+      background: var(--off-white);
+    }
+    .article-body ul { margin: 0 0 1.4rem 1.4rem; }
+    .article-body li { margin-bottom: 0.6rem; }
+
+    .article-share {
+      display: flex; align-items: center; gap: 1rem;
+      margin-top: 3rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .share-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-lt); }
+    .share-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; color: var(--grey-md);
+      transition: all 0.3s; cursor: pointer;
+    }
+    .share-btn:hover { border-color: var(--green-accent); color: var(--green-accent); background: var(--green-pale); }
+
+    /* RELATED */
+    .related-section {
+      background: var(--off-white);
+      padding: 5rem 5vw;
+    }
+    .related-title {
+      font-family: var(--ff-editorial);
+      font-size: 1.6rem; font-weight: 700;
+      text-align: center; margin-bottom: 3rem;
+    }
+    .related-grid {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px;
+      background: var(--border);
+    }
+    .related-card { background: var(--white); padding: 1.8rem; cursor: pointer; transition: box-shadow 0.3s; }
+    .related-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.06); position: relative; z-index: 1; }
+    .related-cat { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green-accent); margin-bottom: 0.6rem; display: block; }
+    .related-card-title { font-family: var(--ff-editorial); font-size: 1.05rem; font-weight: 600; line-height: 1.4; }
+
+    footer { background: var(--black); padding: 3rem 5vw; text-align: center; }
+    .footer-copy { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+
+    @media (max-width: 768px) {
+      .article-hero-img { height: 280px; }
+      .related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html"><img src="assets/acm-logo.jpeg" alt="ACM" class="logo-img" /></a>
+  <a href="index.html#news" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to Insights
+  </a>
+</nav>
+
+<article>
+  <div class="article-hero">
+    <div class="article-meta">
+      <span class="article-cat">Export</span>
+      <div class="article-dot"></div>
+      <span class="article-date">May 2025</span>
+    </div>
+    <h1 class="article-title">Algerian Deglet Nour Sees Record European Demand in 2025 Season</h1>
+    <p class="article-lede">Premium Algerian date varieties are capturing premium shelf space in French and German retail chains — and ACM is at the centre of this export surge.</p>
+  </div>
+  <div style="max-width:880px;margin:0 auto;padding:0 5vw;">
+    <img class="article-hero-img" src="assets/news-export.jpg" alt="Algerian dates export" />
+  </div>
+
+  <div class="article-body">
+    <p>Each export season tells you something about how a market is changing, and the 2025 season has told a particularly encouraging story for Algerian agriculture. Deglet Nour — long regarded as the "queen of dates" for its honey-like flesh and delicate translucency — is moving through European retail at volumes ACM's export desk hasn't seen in years.</p>
+
+    <h2>Why Demand Is Climbing</h2>
+    <p>A few forces are converging at once. European consumers are increasingly drawn to naturally sweetened, minimally processed foods, and dates fit that shift well. At the same time, French and German retail chains have been actively diversifying their premium produce sections, looking for products with a clear origin story and distinctive quality — exactly the positioning Algerian Deglet Nour has built over decades.</p>
+    <p>ACM's role in this has been to ensure that the supply chain behind the product is as reliable as the product itself: consistent grading, proper cold-chain logistics, and documentation that meets European import standards without friction.</p>
+
+    <blockquote>"Quality alone doesn't win shelf space. Reliability does. Retailers need to know that what arrives in March will be the same as what arrived in October."</blockquote>
+
+    <h2>What This Means for Local Producers</h2>
+    <p>Increased export demand has a direct effect further up the chain — for the growers and cooperatives ACM works with across the date-producing regions of Algeria. As volumes grow, so does the incentive to invest in better post-harvest handling, sorting technology, and packaging, all of which raise the baseline quality of what reaches international markets.</p>
+    <ul>
+      <li><strong>Higher grower margins</strong> as export-grade product commands a premium over local-market sales.</li>
+      <li><strong>Investment in processing infrastructure</strong> at the cooperative level, improving consistency season over season.</li>
+      <li><strong>Stronger negotiating position</strong> for Algerian exporters as demand outpaces some competing origins.</li>
+    </ul>
+
+    <h2>Looking Ahead</h2>
+    <p>ACM expects this momentum to continue into the next season, and is working with partner farms to expand cultivated area without compromising the quality standards that built this demand in the first place. The goal isn't just to sell more — it's to make sure Algerian dates remain associated with the quality that earned them this position.</p>
+  </div>
+
+  <div class="article-body" style="padding-top:0;margin-top:-2rem;">
+    <div class="article-share">
+      <span class="share-label">Share</span>
+      <div class="share-btn" title="Share on LinkedIn">in</div>
+      <div class="share-btn" title="Share via WhatsApp">wa</div>
+      <div class="share-btn" title="Copy link">🔗</div>
+    </div>
+  </div>
+</article>
+
+<section class="related-section">
+  <h3 class="related-title">More Insights</h3>
+  <div class="related-grid">
+    <a href="article-1.html" class="related-card">
+      <span class="related-cat">Agri-Technology</span>
+      <div class="related-card-title">How AI-Powered Soil Analysis is Transforming Crop Yields Across North Africa</div>
+    </a>
+    <a href="article-3.html" class="related-card">
+      <span class="related-cat">Sustainability</span>
+      <div class="related-card-title">ACM Launches Water-Efficient Farming Initiative Across Three Algerian Provinces</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-copy">© 2025 ACM — Agronomy &amp; Consulting · Merabet. All rights reserved.</div>
+</footer>
+
+</body>
+</html>
