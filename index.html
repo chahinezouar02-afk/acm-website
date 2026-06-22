@@ -287,28 +287,29 @@
     .btn-primary {
       display: inline-flex; align-items: center; gap: 0.6rem;
       padding: 14px 32px;
-      background: var(--green-accent);
+      background: var(--terracotta);
       color: var(--white);
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.14em;
       text-transform: uppercase;
       border-radius: 2px;
-      border: 1.5px solid var(--green-accent);
+      border: 1.5px solid var(--terracotta);
       cursor: pointer;
       transition: all 0.35s var(--ease-expo);
       position: relative; overflow: hidden;
+      box-shadow: 0 8px 28px rgba(200,105,63,0.35);
     }
     .btn-primary::before {
       content: '';
       position: absolute; inset: 0;
-      background: var(--green-deep);
+      background: var(--terracotta-dk);
       transform: translateX(-105%);
       transition: transform 0.4s var(--ease-expo);
     }
     .btn-primary:hover::before { transform: translateX(0); }
     .btn-primary span { position: relative; z-index: 1; }
-    .btn-primary:hover { border-color: var(--green-deep); }
+    .btn-primary:hover { border-color: var(--terracotta-dk); }
 
     .btn-ghost {
       display: inline-flex; align-items: center; gap: 0.6rem;
